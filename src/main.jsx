@@ -9,6 +9,9 @@ import Conatct from './component/Conatct.jsx'
 import Product from './component/Product.jsx'
 import axios from "axios"
 import ProductDetails from './component/ProductDetails.jsx'
+import ContactCart from './component/ContactCart.jsx'
+import ContactCartDetails from './component/ContactCartDetails.jsx'
+import NotFound from './component/NotFound.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +21,14 @@ const router = createBrowserRouter([
       {index: true, Component: Home},
       {path: 'about', Component: About},
       {path: 'contact', Component: Conatct},
+      {
+        path: "contact/:id",
+        loader: async ({params}) => {
+          const a = await axios.get(`https://jsonplaceholder.typicode.com/comments/${params.id}`)
+          return a.data
+        },
+        Component: ContactCartDetails
+      },
       {
         path: "product",
         // loader: async () => {
@@ -34,7 +45,11 @@ const router = createBrowserRouter([
       {
         path: "product/:id",
         loader: ({params}) => fetch(`https://jsonplaceholder.typicode.com/users/${params.id}`),
-        Component: ProductDetails
+        Component: ProductDetails,
+        errorElement: <NotFound></NotFound>
+      },
+      {
+        path: "*", Component: NotFound
       },
     ]
   },
